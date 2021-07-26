@@ -130,30 +130,24 @@ MOVE_DOWN = 2
 
 class TetrisSquare():
     def __init__(self, x=0, y=0, color="gray"):
-        '１つの正方形を作成'
         self.x = x
         self.y = y
         self.color = color
 
     def set_cord(self, x, y):
-        '正方形の座標を設定'
         self.x = x
         self.y = y
 
     def get_cord(self):
-        '正方形の座標を取得'
         return int(self.x), int(self.y)
 
     def set_color(self, color):
-        '正方形の色を設定'
         self.color = color
 
     def get_color(self):
-        '正方形の色を取得'
         return self.color
 
     def get_moved_cord(self, direction):
-        '移動後の正方形の座標を取得'
 
         
         x, y = self.get_cord()
@@ -171,7 +165,7 @@ class TetrisSquare():
 
 class TetrisCanvas(tk.Canvas):
     def __init__(self, master, field):
-        'テトリスを描画するキャンバスを作成'
+     
 
         canvas_width = field.get_width() * BLOCK_SIZE
         canvas_height = field.get_height() * BLOCK_SIZE
@@ -200,7 +194,7 @@ class TetrisCanvas(tk.Canvas):
         self.before_field = field
 
     def update(self, field, block):
-        'テトリス画面をアップデート'
+
 
         
         new_field = TetrisField()
@@ -264,27 +258,24 @@ class TetrisField():
                 self.squares.append(TetrisSquare(x, y, "gray"))
 
     def get_width(self):
-        'フィールドの正方形の数（横方向）を取得'
+
 
         return self.width
 
     def get_height(self):
-        'フィールドの正方形の数（縦方向）を取得'
+
 
         return self.height
 
     def get_squares(self):
-        'フィールドを構成する正方形のリストを取得'
-
         return self.squares
 
     def get_square(self, x, y):
-        '指定した座標の正方形を取得'
+
 
         return self.squares[y * self.width + x]
 
     def judge_game_over(self, block):
-        'ゲームオーバーかどうかを判断'
 
   
         no_empty_cord = set(square.get_cord() for square
@@ -306,7 +297,6 @@ class TetrisField():
         return ret
 
     def judge_can_move(self, block, direction):
-        '指定した方向にブロックを移動できるかを判断'
 
         
         no_empty_cord = set(square.get_cord() for square
@@ -336,7 +326,6 @@ class TetrisField():
         return ret
 
     def fix_block(self, block):
-        'ブロックを固定してフィールドに追加'
 
         for square in block.get_squares():
             x, y = square.get_cord()
@@ -347,7 +336,6 @@ class TetrisField():
             field_square.set_color(color)
 
     def delete_line(self):
-        '行の削除を行う'
 
         
         for y in range(self.height):
@@ -367,7 +355,6 @@ class TetrisField():
 
 class TetrisBlock():
     def __init__(self):
-        'テトリスのブロックを作成'
 
       
         self.squares = []
@@ -413,12 +400,10 @@ class TetrisBlock():
             self.squares.append(TetrisSquare(cord[0], cord[1], color))
 
     def get_squares(self):
-        'ブロックを構成する正方形を取得'
 
         return self.squares
 
     def move(self, direction):
-        'ブロックを移動'
 
         for square in self.squares:
             x, y = square.get_moved_cord(direction)
@@ -427,7 +412,6 @@ class TetrisBlock():
 class TetrisGame():
 
     def __init__(self, master):
-        'テトリスのインスタンス作成'
 
         self.field = TetrisField()
 
@@ -438,7 +422,6 @@ class TetrisGame():
         self.canvas.update(self.field, self.block)
 
     def start(self, func):
-        'テトリスを開始'
 
         self.end_func = func
 
@@ -447,7 +430,6 @@ class TetrisGame():
         self.new_block()
 
     def new_block(self):
-        'ブロックを新規追加'
 
         self.block = TetrisBlock()
 
@@ -458,7 +440,6 @@ class TetrisGame():
         self.canvas.update(self.field, self.block)
 
     def move_block(self, direction):
-        'ブロックを移動'
 
         if self.field.judge_can_move(self.block, direction):
 
@@ -485,7 +466,6 @@ class EventHandller():
         button.place(x=25 + BLOCK_SIZE * FIELD_WIDTH + 25, y=30)
 
     def start_event(self):
-        'ゲームスタートボタンを押された時の処理'
 
         self.game.start(self.end_event)
         self.running = True
@@ -497,7 +477,6 @@ class EventHandller():
         self.master.bind("<Down>", self.down_key_event)
 
     def end_event(self):
-        'ゲーム終了時の処理'
         self.running = False
 
         self.timer_end()
@@ -506,14 +485,12 @@ class EventHandller():
         self.master.unbind("<Down>")
 
     def timer_end(self):
-        'タイマーを終了'
 
         if self.timer is not None:
             self.master.after_cancel(self.timer)
             self.timer = None
 
     def timer_start(self):
-        'タイマーを開始'
 
         if self.timer is not None:
             self.master.after_cancel(self.timer)
@@ -522,24 +499,20 @@ class EventHandller():
             self.timer = self.master.after(1000, self.timer_event)
 
     def left_key_event(self, event):
-        '左キー入力受付時の処理'
 
         self.game.move_block(MOVE_LEFT)
 
     def right_key_event(self, event):
-        '右キー入力受付時の処理'
 
         self.game.move_block(MOVE_RIGHT)
 
     def down_key_event(self, event):
-        '下キー入力受付時の処理'
 
         self.game.move_block(MOVE_DOWN)
 
         self.timer_start()
 
     def timer_event(self):
-        'タイマー満期になった時の処理'
 
         self.down_key_event(None)
 
@@ -549,7 +522,7 @@ class Application(tk.Tk):
         super().__init__()
 
         self.geometry("400x600")
-        self.title("テトリス")
+        self.title("Tetris")
 
         game = TetrisGame(self)
 
